@@ -31,6 +31,8 @@ export async function api<T>(path: string, init: RequestInit & { json?: unknown 
   }
 
   if (res.status === 401 && typeof window !== "undefined") {
+    // Deliberate full navigation: drops every cached query that belonged to the expired session.
+    // eslint-disable-next-line @next/next/no-location-assign-relative-destination
     window.location.assign(`/login?next=${encodeURIComponent(window.location.pathname + window.location.search)}`);
   }
   if (res.status === 204) return undefined as T;

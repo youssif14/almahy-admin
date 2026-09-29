@@ -15,6 +15,7 @@ interface TableProps {
   rows: CaseListItem[];
   lawyers: Map<string, Lawyer>;
   query: CaseQuery;
+  now: number;
   selected: Set<string>;
   canSelect: boolean;
   canDelete: boolean;
@@ -34,7 +35,7 @@ const COLUMNS: { field?: SortField; label: string; className?: string }[] = [
   { field: "billed", label: "Billed", className: "hidden lg:table-cell text-right" },
 ];
 
-export function CasesTable({ rows, lawyers, query, selected, canSelect, canDelete, onSort, onToggle, onToggleAll, onDelete }: TableProps) {
+export function CasesTable({ rows, lawyers, query, now, selected, canSelect, canDelete, onSort, onToggle, onToggleAll, onDelete }: TableProps) {
   const allSelected = rows.length > 0 && rows.every((r) => selected.has(r.id));
   const someSelected = !allSelected && rows.some((r) => selected.has(r.id));
 
@@ -79,6 +80,7 @@ export function CasesTable({ rows, lawyers, query, selected, canSelect, canDelet
               key={row.id}
               row={row}
               lawyer={lawyers.get(row.lawyerId)}
+              now={now}
               checked={selected.has(row.id)}
               canSelect={canSelect}
               canDelete={canDelete}
@@ -96,6 +98,7 @@ export function CasesTable({ rows, lawyers, query, selected, canSelect, canDelet
 const Row = memo(function Row({
   row,
   lawyer,
+  now,
   checked,
   canSelect,
   canDelete,
@@ -104,13 +107,14 @@ const Row = memo(function Row({
 }: {
   row: CaseListItem;
   lawyer?: Lawyer;
+  now: number;
   checked: boolean;
   canSelect: boolean;
   canDelete: boolean;
   onToggle: (id: string) => void;
   onDelete: (row: CaseListItem) => void;
 }) {
-  const overdue = row.deadline && Date.parse(row.deadline) < Date.now() && !row.status.startsWith("closed");
+  const overdue = row.deadline && Date.parse(row.deadline) < now && !row.status.startsWith("closed");
   return (
     <tr className={cn("transition-colors hover:bg-paper/70", checked && "bg-brass-soft/50 hover:bg-brass-soft/70")}>
       {canSelect && (

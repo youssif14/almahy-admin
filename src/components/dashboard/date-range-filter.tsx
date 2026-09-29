@@ -20,9 +20,11 @@ export function DateRangeFilter({ from, to }: { from: string; to: string }) {
   const params = useSearchParams();
   const [pending, startTransition] = useTransition();
   const [custom, setCustom] = useState({ from, to });
+  const [nowMs] = useState(() => Date.now()); // read the clock once, not on every render
 
-  const today = toDateInput(new Date());
-  const activePreset = to === today ? PRESETS.find((p) => toDateInput(new Date(Date.now() - (p.days - 1) * DAY)) === from)?.id : undefined;
+  const today = toDateInput(new Date(nowMs));
+  const presetFrom = (days: number) => toDateInput(new Date(nowMs - (days - 1) * DAY));
+  const activePreset = to === today ? PRESETS.find((p) => presetFrom(p.days) === from)?.id : undefined;
 
   function apply(next: { from: string; to: string }) {
     const sp = new URLSearchParams(params);
@@ -41,7 +43,7 @@ export function DateRangeFilter({ from, to }: { from: string; to: string }) {
             key={p.id}
             type="button"
             aria-pressed={activePreset === p.id}
-            onClick={() => apply({ from: toDateInput(new Date(Date.now() - (p.days - 1) * DAY)), to: today })}
+            onClick={() => apply({ from: presetFrom(p.days), to: today })}
             className={cn(
               "rounded-[4px] px-2.5 py-1.5 text-xs font-medium transition-colors",
               activePreset === p.id ? "bg-ink text-white" : "text-ink-soft hover:bg-paper",

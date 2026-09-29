@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { FileSearch, Plus } from "lucide-react";
 import type { CaseListItem, Lawyer } from "@/types";
 import type { SortField } from "@/lib/cases/constants";
@@ -37,9 +37,14 @@ export function CasesView({ initialLawyers }: { initialLawyers: Lawyer[] }) {
 
   const rows = useMemo(() => list.data?.data ?? [], [list.data]);
 
-  // A selection only makes sense for the rows on screen.
+  // A selection only makes sense for the rows on screen: reset it when the query changes.
   const queryKey = JSON.stringify(query);
-  useEffect(() => setSelected(new Set()), [queryKey]);
+  const [prevKey, setPrevKey] = useState(queryKey);
+  if (queryKey !== prevKey) {
+    setPrevKey(queryKey);
+    setSelected(new Set());
+  }
+  const [now] = useState(() => Date.now()); // stable "now" for overdue checks during this visit
 
   const onToggle = useCallback((id: string) => {
     setSelected((prev) => {
@@ -122,6 +127,7 @@ export function CasesView({ initialLawyers }: { initialLawyers: Lawyer[] }) {
               rows={rows}
               lawyers={lawyerMap}
               query={query}
+              now={now}
               selected={selected}
               canSelect={canBulk}
               canDelete={canDelete}

@@ -25,8 +25,14 @@ export function CasesToolbar({ query, lawyers, activeFilterCount, onChange }: Pr
     // eslint-disable-next-line react-hooks/exhaustive-deps -- only react to the debounced text
   }, [debounced]);
 
-  // Keep the box in sync when the URL changes elsewhere (back button, "Clear all").
-  useEffect(() => setSearch(query.q ?? ""), [query.q]);
+  // Keep the box in sync when the URL changes from elsewhere (back button, a link).
+  // Adjusting state during render avoids an extra effect pass; the debounced check
+  // stops us overwriting text the user is still typing.
+  const [prevQ, setPrevQ] = useState(query.q);
+  if (query.q !== prevQ) {
+    setPrevQ(query.q);
+    if ((query.q ?? "") !== debounced) setSearch(query.q ?? "");
+  }
 
   return (
     <div className="flex flex-col gap-3 border-b border-line p-4 lg:flex-row lg:items-center">

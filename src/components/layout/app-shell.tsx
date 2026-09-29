@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState, type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { BarChart3, Briefcase, LogOut, Menu, Plus, X } from "lucide-react";
 import type { SessionUser } from "@/types";
 import { SessionProvider } from "@/components/session-context";
@@ -19,8 +19,6 @@ export function AppShell({ user, children }: { user: SessionUser; children: Reac
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [signingOut, setSigningOut] = useState(false);
-
-  useEffect(() => setOpen(false), [pathname]); // close the drawer after navigating
 
   async function signOut() {
     setSigningOut(true);
@@ -118,7 +116,8 @@ export function AppShell({ user, children }: { user: SessionUser; children: Reac
           <div className="fixed inset-0 z-40 lg:hidden" role="dialog" aria-modal="true" aria-label="Menu" id="mobile-nav"
             onKeyDown={(e) => e.key === "Escape" && setOpen(false)}>
             <button type="button" className="absolute inset-0 animate-fade bg-ink/50" aria-label="Close menu" onClick={() => setOpen(false)} />
-            <div className="relative h-full w-72 max-w-[85vw] animate-pop">
+            {/* Close the drawer when any link inside it is followed. */}
+            <div className="relative h-full w-72 max-w-[85vw] animate-pop" onClick={(e) => (e.target as HTMLElement).closest("a") && setOpen(false)}>
               {sidebar}
               <button type="button" autoFocus onClick={() => setOpen(false)} className="absolute right-3 top-4 rounded p-2 text-white/70" aria-label="Close menu">
                 <X className="size-5" />
