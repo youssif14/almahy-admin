@@ -14,7 +14,9 @@ const csvEnum = <T extends string>(values: readonly [T, ...T[]]) =>
       (raw ?? "")
         .split(",")
         .map((v) => v.trim())
-        .filter((v): v is T => (values as readonly string[]).includes(v)),
+        .filter((v): v is T => (values as readonly string[]).includes(v))
+        .filter((v, i, all) => all.indexOf(v) === i)
+        .sort(), // canonical order: same filters = same URL = same cache key
     );
 
 export const caseQuerySchema = z.object({
