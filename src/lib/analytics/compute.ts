@@ -1,4 +1,4 @@
-import type { CaseStatus, LegalCase, Lawyer, ServiceType } from "@/types";
+import type { CaseStatus, LegalCase, Lawyer, Priority, ServiceType } from "@/types";
 import { OPEN_STATUSES, SERVICES, SERVICE_KEYS, STATUSES, STATUS_KEYS } from "@/lib/cases/constants";
 
 export interface DateRange {
@@ -20,7 +20,7 @@ export interface Analytics {
   byService: { service: ServiceType; label: string; cases: number; revenue: number }[];
   byStatus: { status: CaseStatus; label: string; count: number }[];
   workload: { lawyerId: string; name: string; open: number; urgent: number }[];
-  upcomingDeadlines: { id: string; reference: string; title: string; deadline: string; priority: string }[];
+  upcomingDeadlines: { id: string; reference: string; title: string; deadline: string; priority: Priority }[];
 }
 
 const DAY = 86_400_000;
