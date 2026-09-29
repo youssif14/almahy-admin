@@ -54,17 +54,17 @@ export function DateRangeFilter({ from, to }: { from: string; to: string }) {
         ))}
       </div>
       <form
-        className="flex items-center gap-1.5"
+        className="flex w-full items-center gap-1.5 sm:w-auto"
         onSubmit={(e) => {
           e.preventDefault();
           if (custom.from && custom.to && custom.from <= custom.to) apply(custom);
         }}
       >
         <label className="sr-only" htmlFor="range-from">From</label>
-        <Input id="range-from" type="date" value={custom.from} max={custom.to} onChange={(e) => setCustom((c) => ({ ...c, from: e.target.value }))} className="h-9 w-[9.5rem]" />
+        <Input id="range-from" type="date" value={custom.from} max={custom.to} onChange={(e) => setCustom((c) => ({ ...c, from: e.target.value }))} className="h-9 min-w-0 flex-1 sm:w-[9.5rem] sm:flex-none" />
         <span className="text-muted" aria-hidden>to</span>
         <label className="sr-only" htmlFor="range-to">To</label>
-        <Input id="range-to" type="date" value={custom.to} min={custom.from} max={today} onChange={(e) => setCustom((c) => ({ ...c, to: e.target.value }))} className="h-9 w-[9.5rem]" />
+        <Input id="range-to" type="date" value={custom.to} min={custom.from} max={today} onChange={(e) => setCustom((c) => ({ ...c, to: e.target.value }))} className="h-9 min-w-0 flex-1 sm:w-[9.5rem] sm:flex-none" />
         <Button type="submit" variant="secondary" size="sm" disabled={custom.from > custom.to}>
           Apply
         </Button>

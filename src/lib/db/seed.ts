@@ -110,10 +110,11 @@ export function seedCases(count = 260, now = Date.now()): LegalCase[] {
     }
 
     const deadline = closed ? undefined : new Date(now + (Math.floor(rand() * 90) - 10) * DAY).toISOString();
+    const title = pick(rand, TITLES[service]);
     cases.push({
       id,
       reference: `ALM-${opened.getFullYear()}-${seq}`,
-      title: pick(rand, TITLES[service]),
+      title,
       service,
       status,
       priority,
@@ -128,7 +129,7 @@ export function seedCases(count = 260, now = Date.now()): LegalCase[] {
       openedAt: opened.toISOString(),
       deadline,
       closedAt,
-      summary: `Client engaged Almahy for ${TITLES[service][0].toLowerCase()} matters. Initial documents reviewed and next steps agreed with the client.`,
+      summary: `Client engaged the firm on this ${title.charAt(0).toLowerCase() + title.slice(1)}. Initial documents have been reviewed and next steps agreed with the client.`,
       ...(service === "corporate" ? { jurisdiction: pick(rand, ["mainland", "free-zone", "offshore"] as const) } : {}),
       ...(service === "second-passport" ? { programCountry: pick(rand, PROGRAM_COUNTRIES) } : {}),
       ...(service === "legal" ? { courtName: pick(rand, COURTS) } : {}),

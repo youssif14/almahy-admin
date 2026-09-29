@@ -41,7 +41,7 @@ export function CasesTable({ rows, lawyers, query, now, selected, canSelect, can
 
   return (
     <div className="overflow-x-auto">
-      <table className="w-full min-w-[36rem] text-sm">
+      <table className="w-full text-sm sm:min-w-[36rem]">
         <caption className="sr-only">Cases, sorted by {query.sort} {query.dir === "asc" ? "ascending" : "descending"}</caption>
         <thead className="border-b border-line bg-paper/60 text-left text-xs text-muted">
           <tr>

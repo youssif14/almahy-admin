@@ -27,7 +27,7 @@ export function TrendChart({ data }: { data: Analytics["trend"] }) {
               formatter={(value, name) => (name === "Fees billed" ? formatAED(Number(value)) : value)}
             />
             <Bar yAxisId="cases" dataKey="newCases" name="New cases" fill={SAGE} radius={[3, 3, 0, 0]} maxBarSize={28} />
-            <Line yAxisId="fees" dataKey="revenue" name="Fees billed" stroke={BRASS} strokeWidth={2.5} dot={false} type="monotone" />
+            <Line yAxisId="fees" dataKey="revenue" name="Fees billed" stroke={BRASS} strokeWidth={2.5} dot={false} type="monotoneX" />
           </ComposedChart>
         </ResponsiveContainer>
       </div>

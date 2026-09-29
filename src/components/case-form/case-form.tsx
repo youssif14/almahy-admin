@@ -63,6 +63,7 @@ export function CaseForm({ lawyers }: { lawyers: Lawyer[] }) {
   const stepKey = FORM_STEPS[step].key;
 
   async function next() {
+    setFormError(null);
     if (await trigger(stepKey, { shouldFocus: true })) setStep((s) => s + 1);
   }
 

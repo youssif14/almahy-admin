@@ -1,6 +1,11 @@
 import clsx, { type ClassValue } from "clsx";
+import { extendTailwindMerge } from "tailwind-merge";
 
-export const cn = (...inputs: ClassValue[]) => clsx(inputs);
+// tailwind-merge resolves conflicts, so `cn("w-full", "w-auto")` yields `w-auto` (last one wins).
+const twMerge = extendTailwindMerge({
+  extend: { theme: { radius: ["control", "panel"] } },
+});
+export const cn = (...inputs: ClassValue[]) => twMerge(clsx(inputs));
 
 const aed = new Intl.NumberFormat("en-AE", { style: "currency", currency: "AED", maximumFractionDigits: 0 });
 const compact = new Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 1 });
